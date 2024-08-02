@@ -7,5 +7,5 @@ import com.sunbeam.entity.Customer;
 public interface CustomerDao extends JpaRepository<Customer, Long> {
 	
 	//Customer registerCustomer();
-
+	Customer findByCustomerEmailAndPassword(String customerEmail,String password);
 }
