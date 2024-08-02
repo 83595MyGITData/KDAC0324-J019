@@ -11,6 +11,8 @@ import com.sunbeam.dao.CustomerDao;
 import com.sunbeam.dto.CustomerDto;
 import com.sunbeam.entity.Customer;
 
+import main.java.com.sunbeam.dto.LoginDto;
+
 @Transactional
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -32,6 +34,24 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<Customer> getAllCustomers() {
 		// TODO Auto-generated method stub
 		return customerdao.findAll();
+	}
+	@Override
+	public ApiResponse login(LoginDto dto) {
+		String email=dto.getCustomerEmail();
+		String password=dto.getPassword();
+		Customer customer= customerdao.findByCustomerEmailAndPassword(email,password);
+		if(customer==null) {
+			return  new ApiResponse("Invalied Email and Password");
+		}
+//		if(customer!=null){
+//		 if(customer.getPassword()==dto.getPassword()) {
+//			 return new ApiResponse("Login Successfully");
+//	
+//		}
+//		return new ApiResponse("Invalie Password");
+//	}
+		return new ApiResponse("Login Successfully");
+	
 	}
 	
 	
