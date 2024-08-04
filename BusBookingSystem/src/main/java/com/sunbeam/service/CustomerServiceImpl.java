@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunbeam.dao.CustomerDao;
+import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.CustomerDto;
+import com.sunbeam.dto.LoginDto;
 import com.sunbeam.entity.Customer;
-
-import main.java.com.sunbeam.dto.LoginDto;
+import com.sunbeam.entity.Role;
 
 @Transactional
 @Service
@@ -25,7 +26,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public String registerCustomer(CustomerDto dto)
 	{
 		//System.out.println("Service:: "+dto);
-		Customer customer=mapper.map(dto, Customer.class);	
+		Customer customer=mapper.map(dto, Customer.class);
+		customer.setRole(Role.CUSTOMER);
 		customerdao.save(customer);		
 		return "Regisered Successfully";
 	}
@@ -51,7 +53,6 @@ public class CustomerServiceImpl implements CustomerService {
 //		return new ApiResponse("Invalie Password");
 //	}
 		return new ApiResponse("Login Successfully");
-	
 	}
 	
 	

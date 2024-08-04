@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +34,7 @@ public class Schedule extends BaseEntity{
 	private LocalDateTime arrivalTime;
 	@Column(name="availabe_seats")
 	private int availabeSeats;
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "bus_id",nullable = false)
 	private Bus bus;

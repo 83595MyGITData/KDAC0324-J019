@@ -8,11 +8,11 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
-public class LoginDto {
-	private String customerEmail;
-	private String password;
+public class SearchDto {
+	private String source;
+	private String destination;
 
 }

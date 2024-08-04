@@ -1,15 +1,19 @@
 package com.sunbeam.service;
 
+import java.time.LocalDate;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sunbeam.dao.BusDao;
 import com.sunbeam.dao.CustomerDao;
 import com.sunbeam.dao.ReservationDao;
 import com.sunbeam.dao.ScheduleDao;
 import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.ReservationDto;
+import com.sunbeam.entity.Bus;
 import com.sunbeam.entity.Customer;
 import com.sunbeam.entity.Reservation;
 import com.sunbeam.entity.Schedule;
@@ -25,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
 	private CustomerDao customerdao;
 	
 	@Autowired
-	private ScheduleDao scheduledao;
+	private BusDao busDao;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -36,16 +40,15 @@ public class ReservationServiceImpl implements ReservationService {
 		Customer customer=customerdao.findById(dto.getCustomerId())
 				.orElseThrow(()-> new RuntimeException("Invalid Customer Id"));
 		
-		Schedule schedule= scheduledao.findById(dto.getSchdeuleId())
-				.orElseThrow(()-> new RuntimeException("Invalid Schedule Id"));
+		Bus busId= busDao.findById(dto.getBusId())
+				.orElseThrow(()-> new RuntimeException("Invalid Bus Id"));
 		
 		Reservation reservation=mapper.map(dto, Reservation.class);
 		
 		reservation.setCustomer(customer);
-		reservation.setSchdeule(schedule);
-		
+		reservation.setSelectedBus(busId);
+	    reservation.setReservationDate(LocalDate.now());
 		Reservation persistReservation=reservationdao.save(reservation);
-			
 		return new ApiResponse("Reservation Confirmed");
 	}
 }

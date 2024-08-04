@@ -1,9 +1,13 @@
 package com.sunbeam.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sunbeam.dto.CustomerDto;
 import com.sunbeam.dto.LoginDto;
 import com.sunbeam.dto.ReservationDto;
+import com.sunbeam.dto.SearchDto;
 import com.sunbeam.exceptions.ResourceNotFoundException;
+import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
 import com.sunbeam.service.ReservationService;
 
@@ -26,10 +32,13 @@ public class CustomerController {
 	@Autowired
 	private ReservationService reservationservice;
 	
+	@Autowired
+	private BusService busservice;
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerCustomer(@RequestBody CustomerDto dto)
 	{
+		System.out.println(dto);
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(customerservice.registerCustomer(dto));
 		}
@@ -54,6 +63,22 @@ public class CustomerController {
 		}
 	}
 	
+	
+	
+	@GetMapping("/{sourse}/{dest}/{date}")
+	public ResponseEntity<?> getBues(@PathVariable String sourse,@PathVariable String dest,@PathVariable String date)
+	{
+		//System.out.println(dto);
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(busservice.getAllBusesBySourceAndDest(sourse,dest,date));
+		}
+		catch(RuntimeException e){
+			
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResourceNotFoundException( e.getMessage()));
+			
+		}
+		
+	}
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginDto dto)
 	{
@@ -62,10 +87,26 @@ public class CustomerController {
 		}
 		catch(RuntimeException e){
 			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResourceNotFoundException( e.getMessage()));
-			
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResourceNotFoundException( e.getMessage()));	
 		}
 	}
+	@GetMapping("/GetAllBuses")
+	public ResponseEntity<?> getAllBuses()
+	{
+		try {
+			return  ResponseEntity.status(HttpStatus.OK).body(busservice.getAllBuses());
+			}
+		catch(RuntimeException e)
+		{
+			return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+		
+	}
+	
+	
+	
+	
+	
 
 
 }

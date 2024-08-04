@@ -32,9 +32,9 @@ public class CustomerDto {
 	
 	private String customerPhone;
 	
-	private String address;
-	
 	private String password;
+	
+	private String address;
 	
 		
 
