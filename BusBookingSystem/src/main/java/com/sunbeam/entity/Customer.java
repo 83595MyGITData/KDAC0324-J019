@@ -2,6 +2,8 @@ package com.sunbeam.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -43,10 +45,12 @@ public class Customer extends BaseEntity {
 	@Column(name = "address")
 	private String address;
 
-	
 	@Column(name = "age")
 	private int age;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
+	private Role role;
 	
 	
 

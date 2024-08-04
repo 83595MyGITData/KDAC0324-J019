@@ -11,8 +11,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
-	private String customerEmail;
-	private String password;
-
+public class RouteDto {
+	
+	private String origin;
+	private int distance;
+	private String destination;
 }
