@@ -7,6 +7,8 @@ import Register from './screens/register';
 import Customer from './screens/Customer'; 
 import Home from './screens/home';
 import Buses from './screens/buses';
+import AddBus from './screens/addBus';
+import BusList from './screens/buslist';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route path='/customer' element={<Customer/>}></Route>
       <Route path='/home' element={<Home/>}></Route>
       <Route path='/buses' element={<Buses/>}></Route>
+      <Route path='/addbus' element={<AddBus/>}></Route>
+      <Route path='/buslist' element={<BusList/>}></Route>
       
       </Routes>
       <ToastContainer/>
