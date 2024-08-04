@@ -5,15 +5,21 @@ import 'react-toastify/dist/ReactToastify.css'
 import Login from './screens/login';
 import Register from './screens/register';
 import Customer from './screens/Customer'; 
+import Home from './screens/home';
+import Buses from './screens/buses';
+
 function App() {
   return (
     <div>
-      <h1 className="page-header" style={{background:"blue",height:50,color:"white",textAlign:"start"}}>BusBuddy
-        </h1>
+      {/* <h1 className="page-header" style={{background:"blue",height:50,color:"white",textAlign:"start"}}>BusBuddy
+        </h1> */}
       <Routes>
-      <Route path='' element={<Customer/>}></Route>
+      <Route path='' element={<Login/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/register' element={<Register/>}></Route>
+      <Route path='/customer' element={<Customer/>}></Route>
+      <Route path='/home' element={<Home/>}></Route>
+      <Route path='/buses' element={<Buses/>}></Route>
       
       </Routes>
       <ToastContainer/>
