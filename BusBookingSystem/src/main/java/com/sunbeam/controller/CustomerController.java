@@ -1,7 +1,5 @@
 package com.sunbeam.controller;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sunbeam.dto.CustomerDto;
 import com.sunbeam.dto.LoginDto;
 import com.sunbeam.dto.ReservationDto;
-import com.sunbeam.dto.SearchDto;
 import com.sunbeam.exceptions.ResourceNotFoundException;
 import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
@@ -24,6 +21,7 @@ import com.sunbeam.service.ReservationService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+//@EnableMethodSecurity(prePostEnabled = true)
 @RequestMapping("/customers")
 public class CustomerController {
 	@Autowired	
@@ -36,6 +34,7 @@ public class CustomerController {
 	private BusService busservice;
 	
 	@PostMapping("/register")
+	//@PreAuthorize("hasAuthority('ROLE_USER')")
 	public ResponseEntity<?> registerCustomer(@RequestBody CustomerDto dto)
 	{
 		System.out.println(dto);
@@ -65,12 +64,12 @@ public class CustomerController {
 	
 	
 	
-	@GetMapping("/{sourse}/{dest}/{date}")
-	public ResponseEntity<?> getBues(@PathVariable String sourse,@PathVariable String dest,@PathVariable String date)
+	@GetMapping("/{source}/{dest}/{date}")
+	public ResponseEntity<?> getBues(@PathVariable String source,@PathVariable String dest,@PathVariable String date)
 	{
 		//System.out.println(dto);
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(busservice.getAllBusesBySourceAndDest(sourse,dest,date));
+			return ResponseEntity.status(HttpStatus.OK).body(busservice.getAllBusesBySourceAndDest(source,dest,date));
 		}
 		catch(RuntimeException e){
 			
@@ -102,11 +101,18 @@ public class CustomerController {
 		}
 		
 	}
+	@GetMapping("/availabilSet/{BusId}")
+	public ResponseEntity<?> availabilSeat(@PathVariable Long BusId )
+	{
+		try {
+			return  ResponseEntity.status(HttpStatus.OK).body(busservice.availabilSeat(BusId));
+			}
+		catch(RuntimeException e)
+		{
+			return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+		
+	}
 	
 	
-	
-	
-	
-
-
 }
