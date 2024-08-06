@@ -1,20 +1,18 @@
 package com.sunbeam.dto;
-import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
+
 @Setter
+@Getter
 @ToString
 @AllArgsConstructor
 public class ReservationDto {
-	private int seatNumber;
-	private boolean reservationStatus;
-	//private LocalDate reservationDate;
-	private Long busId;
-	private Long customerId;
-
+	private Long userId;
+	 private Long busId;
+	 private Integer seatNumber;
 	
 }

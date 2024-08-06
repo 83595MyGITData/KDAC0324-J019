@@ -14,6 +14,7 @@ import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.BusDto;
 import com.sunbeam.dto.CustomerDto;
 import com.sunbeam.dto.SearchDto;
+import com.sunbeam.entity.BooleanStatus;
 import com.sunbeam.entity.Bus;
 import com.sunbeam.entity.Customer;
 import com.sunbeam.entity.Route;
@@ -58,11 +59,21 @@ public class BusServiceImpl implements BusService {
 
 	@Override
 	public String deleteBus(Long id) {
+		 Bus bus = busdao.findById(id).orElseThrow(() -> new RuntimeException("Bus not found"));
+	        bus.setDeletedStatus(BooleanStatus.TRUE);
+	        busdao.save(bus);
+	        return "Bus deleted successfully";
+	}
 
-          Bus bus=busdao.findById(id).orElseThrow(()-> new RuntimeException( "BUS not found"));
-          System.out.println(bus);
-  		busdao.delete(bus);
-		return "Bus deleted Successfully";
+	@Override
+	public List<BooleanStatus> availabilSeat(Long busId) {
+//		Bus bus = busdao.findById(BusId).orElseThrow(() -> new RuntimeException("Bus not found"));
+//		List<BooleanStatus> list=bus.getSetStatus();
+//		return list;
+		Bus bus = busdao.findById(busId).orElseThrow(() -> new RuntimeException("Bus not found"));
+        // Ensure the collection is properly loaded
+        bus.getSetStatus().size();
+        return bus.getSetStatus();
 	}
 	
 		

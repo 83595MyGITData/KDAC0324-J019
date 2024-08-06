@@ -1,12 +1,9 @@
 package com.sunbeam.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
+import java.time.LocalTime;
 
 import com.sunbeam.entity.BusType;
-import com.sunbeam.entity.Route;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,9 +35,9 @@ public class BusDto{
 	
 	private LocalDate journeyDate; 
 	
-	private LocalDateTime departureTime; 
+	private LocalTime departureTime; 
 
-	private LocalDateTime arrivalTime;
+	private LocalTime arrivalTime;
 
 	private int availabeSeats;
 	
