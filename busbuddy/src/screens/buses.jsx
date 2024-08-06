@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Navbar from '../components/navbar'
 import { GetAllBuses } from '../services/customer'
 import { useEffect } from 'react'
+import bg from "../Images/BusHome.jpeg"
 
 function Buses() {
     
@@ -19,13 +20,21 @@ function Buses() {
       useEffect(() => {
         debugger;
         // this function will be called immediately after component gets loaded
-        loadBuses()
+        loadBuses();
+        
     }, [])
   return (
-    <div>
+    <div style={{
+      backgroundImage: `url(${bg})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      height: "100vh",
+      width: "100vw",
+    }}>
      <Navbar />
-      <h2 className='page-header'>Buses</h2>
-      <table className='table table-striped'>
+      <br /><h2 className='page-header'style={{color:"white"}}>Buses</h2> <br />
+      <table className='table table-striped container' style={{borderRadius:"10px",        
+      }}>
         <thead>
           <tr>
             <th>#</th>
