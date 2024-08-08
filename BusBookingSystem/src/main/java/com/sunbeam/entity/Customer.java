@@ -1,5 +1,9 @@
 package com.sunbeam.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -51,6 +55,12 @@ public class Customer extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
+
+
+	 @JsonIgnore
+    @OneToMany
+    
+	private List<FeedBack> feedback= new ArrayList<>();
 	
 	
 
