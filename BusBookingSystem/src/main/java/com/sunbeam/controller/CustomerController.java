@@ -1,5 +1,7 @@
 package com.sunbeam.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.CustomerDto;
+import com.sunbeam.dto.FeedbackDto;
 import com.sunbeam.dto.LoginDto;
 import com.sunbeam.dto.ReservationDto;
+import com.sunbeam.entity.FeedBack;
 import com.sunbeam.exceptions.ResourceNotFoundException;
 import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
@@ -114,5 +118,39 @@ public class CustomerController {
 		
 	}
 	
+
+
+
+
+//add feedback
+	    @PostMapping("feedback/addFeedBack")
+	    public ResponseEntity<?> addFeedback(@RequestBody FeedbackDto dto) {
+	        String newFeedback = feedbackService.addFeedBack(dto);
+	        return new ResponseEntity<>(newFeedback, HttpStatus.CREATED);
+	    }
+	    
+//all feedbacks	    
+	    @GetMapping("feedback/getAllFeedBack")
+	    public ResponseEntity<?> getAllFeedbacks(){
+	    	try {
+				return  ResponseEntity.status(HttpStatus.OK).body(feedbackService.getAllFeedBacks());
+				}
+			catch(RuntimeException e)
+			{
+				return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			}
+	    	
+	    }
+	    
+//feedback for specific bus 
+	    @GetMapping("feedback/busFeedBack/{busId}")
+	    public ResponseEntity<List<FeedBack>> getFeedbackForBus(@PathVariable Long busId) {
+	        List<FeedBack> feedbackList = feedbackService.getFeedBackOfSpcificBus(busId);
+	        return new ResponseEntity<>(feedbackList, HttpStatus.OK);
+	    }
+
+
+
+
 	
 }
