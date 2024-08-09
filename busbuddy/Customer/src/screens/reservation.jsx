@@ -1,21 +1,54 @@
-import React, { useState } from 'react';
-import '../App.css'
+import React, { useEffect, useState } from 'react';
+import '../App.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import { reserveSeats,getAvailableSeats } from '../services/customer';
+import { toast } from 'react-toastify';
 
 const Reservation = () => {
+  const { busId } = useParams();
+  const [userId, setUserId] = useState(1);
+  const [seatNumber, setseatNumber] = useState([]);
+
+
   const createSeats = (num) => {
     return Array.from({ length: num }, (_, i) => ({
-      id: i + 1,
+      id: i+1,
       reserved: false,
       selected: false,
     }));
   };
 
   const initialSeats = createSeats(30);
+  // initialSeats[2].reserved = true; // Example reserved seat
+  // initialSeats[6].reserved = true; // Example reserved seat
+
+  const loadAvailableBusSeat = async () => {
+    debugger;
+    try {
+      const result = await getAvailableSeats(busId);
+      if (result.status === 200) {
+        const updatedSeats = seats.map((seat, index) => ({
+          ...seat,
+          reserved: result.data[index] === 'FALSE'
+        }));
+        setSeats(updatedSeats);
+      }
+    } catch (err) {
+      // Optionally log the error
+      console.error("Error fetching buses:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadAvailableBusSeat();
+  }, []);
+
 
   const [seats, setSeats] = useState(initialSeats);
   const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
-  const [payment, setPayment] = useState('credit-card');
+  
+
+  const nav = useNavigate();
 
   const toggleSeatSelection = (id) => {
     setSeats(
@@ -27,17 +60,33 @@ const Reservation = () => {
     );
   };
 
-  const confirmReservation = () => {
+  const confirmReservation = async () => {
     const selectedSeats = seats.filter((seat) => seat.selected);
     if (selectedSeats.length === 0) {
       alert('Please select at least one seat.');
       return;
     }
-    alert(
-      `Reservation confirmed for seats: ${selectedSeats
-        .map((seat) => seat.id)
-        .join(', ')}`
-    );
+    // alert(
+    //   `Reservation confirmed for seats: ${selectedSeats
+    //     .map((seat) => seat.id)
+    //     .join(', ')}`
+    // );
+    
+    try {
+      const data = await reserveSeats({busId, userId, seatNumber,
+        headers: {
+          'Content-Type': 'application/json'
+        }});
+      console.log(seatNumber);
+      console.log(userId);
+      console.log(busId);
+      toast.success('Seat Reservation Successful!!!');
+      nav(`/ticket/${busId}&&${seatNumber}`);
+    }
+    catch(er){
+      console.log(er);
+      toast.error('Reservation Failed. Please Try Again');
+    }
   };
 
   return (
@@ -50,10 +99,22 @@ const Reservation = () => {
         {seats.map((seat) => (
           <div
             key={seat.id}
-            className={`seat ${seat.reserved ? 'reserved' : ''} ${
-              seat.selected ? 'selected' : ''
-            }`}
-            onClick={() => !seat.reserved && toggleSeatSelection(seat.id)}
+
+            
+
+            className={`seat ${seat.reserved ? 'reserved' : ''} ${seat.selected ? 'selected' : ''
+              }`}
+            // onClick={() => !seat.reserved && toggleSeatSelection(seat.id) &&  setseatNumber(seat.id)}
+            onClick={() => {
+              if (!seat.reserved) {
+                toggleSeatSelection(seat.id);
+                setseatNumber(seat.id-1);
+              }
+            }}
+            
+
+            
+            
           >
             {seat.id}
           </div>
@@ -61,29 +122,9 @@ const Reservation = () => {
       </div>
 
       <div className="details-form">
-        <h2>Passenger Details</h2>
+        
         <form>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <br />
-          <br />
-          <label htmlFor="contact">Contact:</label>
-          <input
-            type="text"
-            id="contact"
-            name="contact"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-          />
-          <br />
-          <br />
-                    <button type="button" onClick={confirmReservation}>
+                   <button type="button" className='btn btn-success' onClick={confirmReservation}>
             Confirm Reservation
           </button>
         </form>
@@ -95,3 +136,5 @@ const Reservation = () => {
 };
 
 export default Reservation;
+
+
