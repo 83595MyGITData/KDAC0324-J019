@@ -76,10 +76,6 @@ public class Bus extends BaseEntity {
     @JsonManagedReference
     @JoinColumn(name = "route_id", nullable = false)
     private Route selectedRoute;
-    
-    @JsonIgnore
-    @OneToMany
-	private List<FeedBack> feedback= new ArrayList<>();
 }
 
 
