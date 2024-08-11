@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom'
 import '../App';
 
 const onLogout = () => {
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('customer');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('customer');
 }
-
-function Navbar() {
+function NavbarCustomer() {
   return (
+
+    
+
+
     <nav className='navbar navbar-expand-lg' 
       // data-bs-theme='dark' 
       style={{ backgroundColor: 'turquoise' }} 
@@ -19,37 +22,27 @@ function Navbar() {
 
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
-          <li className='nav-item'>
+            <li className='nav-item'>
               <Link
-                to='/customer'
+                to='/home'
                 className='nav-link'
                 aria-current='page'
                 href='#'
               >
-                Users
+                Home
               </Link>
             </li>
             <li className='nav-item'>
               <Link
-                to='/routeList'
+                to='/buses'
                 className='nav-link'
                 aria-current='page'
                 href='#'
               >
-                Routes
+                
               </Link>
             </li>
-            <li className='nav-item'>
-              <Link
-                to='/buslist'
-                className='nav-link'
-                aria-current='page'
-                href='#'
-              >
-                Buses
-              </Link>
-            </li>
-            
+           
             <li className='nav-item'>
               <Link onClick={onLogout}
                 to='/login'
@@ -67,4 +60,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default NavbarCustomer

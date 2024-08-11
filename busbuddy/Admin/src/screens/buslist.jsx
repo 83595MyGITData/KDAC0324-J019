@@ -1,96 +1,129 @@
-import { useState} from 'react'
-import Navbar from '../components/navbar'
-import customersData from '../dummy/users.json'
+import { useState, useEffect } from 'react';
+import Navbar from '../components/navbar';
+import { getBusList, deleteBus } from '../services/admin';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import bg from "../Images/BusHome.jpeg";  // Import the background image
 
-import { useEffect } from 'react'
-import { getBusList } from '../services/admin'
-import { Link } from "react-router-dom";
- 
 function BusList() {
-    
-    const [buslist, setBuslist] = useState([])
+    const [buslist, setBuslist] = useState([]);
+    const navigate = useNavigate();
+
     const loadBusList = async () => {
-        const result = await getBusList()
-        if (result['status'] == 200) {
-           setBuslist(result['data'])
-
+        try {
+            const result = await getBusList();
+            if (result['status'] === 200) {
+                setBuslist(result['data']);
+            } else {
+                toast.error("Failed to load bus list.");
+            }
+        } catch (error) {
+            toast.error("An error occurred while fetching bus list.");
         }
-        console.log("bUS LIST:"+buslist)
-      }
-    
-      useEffect(() => {
-        debugger;
-        
-  
-        // this function will be called immediately after component gets loaded
-        loadBusList();
-    }, [])
-  return (
-    <div >
-      <Navbar />
-      <h2 className='page-header'>Bus List</h2>
-      <Link to='/addBus' className='btn btn-primary'>
-        Add Bus
-      </Link>
-      {buslist.length == 0 && (
-        <h3 className='mt-5' style={{ textAlign: 'center' }}>
-          There are not properties at the moment. Please use Add Property button
-          to add one.
-        </h3>
-      )}
-      {buslist.length > 0 && (
-      <table className='table table-striped'>
-        <thead>
-          <tr>
-            <th>Sr no.</th>
-            <th>Bus Number</th>
-            <th>Bus Type</th>
-            <th>Source</th>
-            <th>Destination</th>
-            <th>JourneyDate</th>
-            <th>Arrival Time</th>
-            <th>Departure Time</th>
-            <th>DriverName</th>
-            <th>Bus Capacity</th>
-            <th>Available Seats</th>
-            <th>Fare</th>
-            <th>Actions</th>
-          </tr>
+    };
 
-        </thead>
-        <tbody>
-        {buslist.map((buslist, index) => {
-            return (
-              <tr>
-                <td>{index + 1}</td>
-                <td>{buslist['busNumber']}</td>
-                <td>{buslist['busType']}</td>
-                <td>{buslist['source']}</td>
-                <td>{buslist['destination']}</td>
-                <td>{buslist['journeyDate']}</td>
-                <td>{buslist['arrivalTime']}</td>
-                <td>{buslist['departureTime']}</td>
-                <td>{buslist['driverName']}</td>
-                <td>{buslist['busCapacity']}</td>
-                <td>{buslist['availabeSeats']}</td>
-                <td>{buslist['fare']}</td>
-                
-                
-                <td>
-                  <button className='btn btn-sm btn-danger me-2'>
-                    Delete
-                  </button>
-                  <button className='btn btn-sm btn-primary'>Details</button>
-                </td>
-              </tr>
-            )
-          })}
-          
-        </tbody>
-      </table>
-      )}
-    </div>
-  )
+    useEffect(() => {
+        loadBusList();
+    }, []);
+
+    const onDetails = (busId) => {
+        navigate(`/busdetails/${busId}`);
+    };
+
+    const onDelete = async (busId) => {
+        try {
+            const result = await deleteBus(busId);
+            if (result['status'] === 200) {
+                toast.success("Bus deleted successfully.");
+                setBuslist(buslist.filter(bus => bus.id !== busId));
+            } else {
+                toast.error("Failed to delete bus.");
+            }
+        } catch (error) {
+            toast.error("An error occurred while deleting the bus.");
+        }
+    };
+
+    return (
+        <div style={{
+            backgroundImage: `url(${bg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "100vh",
+            width: "100vw",
+            padding: "20px"
+        }}>
+            <Navbar />
+            <h2 className='page-header' style={{ color: "white", textAlign: "center" }}>Bus List</h2>
+            <div className='d-flex justify-content-center mb-3'>
+                <button onClick={() => navigate('/addBus')} className='btn btn-primary'>
+                    Add Bus
+                </button>
+            </div>
+            {buslist.length === 0 && (
+                <h3 className='mt-5 text-center' style={{ color: "white" }}>
+                    There are no buses at the moment. Please use the Add Bus button to add one.
+                </h3>
+            )}
+            {buslist.length > 0 && (
+                <div className='container'>
+                    <table className='table table-striped' style={{ borderRadius: "10px", overflow: "hidden", backgroundColor: "white" }}>
+                        <thead style={{ backgroundColor: "#f8f9fa" }}>
+                            <tr>
+                                <th>#</th>
+                                <th>Bus Number</th>
+                                <th>Bus Type</th>
+                                <th>Source</th>
+                                <th>Destination</th>
+                                <th>Journey Date</th>
+                                <th>Source Departure Time</th>
+                                <th>Destination Arrival Time</th>
+                                <th>Driver Name</th>
+                                <th>Bus Capacity</th>
+                                <th>Available Seats</th>
+                                <th>Fare</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {buslist
+                                .filter(bus => !bus.deletedStatus)  // Only display buses where deleteStatus is false
+                                .map((bus, index) => (
+                                    <tr key={bus.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{bus.busNumber}</td>
+                                        <td>{bus.busType}</td>
+                                        <td>{bus.source}</td>
+                                        <td>{bus.destination}</td>
+                                        <td>{bus.journeyDate}</td>
+                                        <td>{bus.departureTime}</td>
+                                        <td>{bus.arrivalTime}</td>
+                                        <td>{bus.driverName}</td>
+                                        <td>{bus.busCapacity}</td>
+                                        <td>{bus.availabelSeats}</td>
+                                        <td>{bus.fare}</td>
+                                        <td>
+                                            <div className='d-flex'>
+                                                <button 
+                                                    onClick={() => onDelete(bus.id)} 
+                                                    className='btn btn-sm btn-danger me-2'>
+                                                    Delete
+                                                </button>
+                                                <button 
+                                                    onClick={() => onDetails(bus.id)} 
+                                                    className='btn btn-sm btn-primary'>
+                                                    Details
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
 }
 
-export default BusList
+export default BusList;

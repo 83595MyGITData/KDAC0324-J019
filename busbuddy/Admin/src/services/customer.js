@@ -22,6 +22,31 @@ export async function register(customerFname, customerLname, customerEmail, pass
   //return null
 }
 
+export async function getAvailableSeats(busId) {
+  try {
+    debugger;
+    const response = await axios.get(`${config.serverUrl}/customers/availabilSet/${busId}`);
+    console.log("Response Data:"+response.data);
+    return response;
+  } catch (ex) {
+    console.error('Exception:', ex);
+    return null;
+  }
+}
+
+export async function reserveSeats(data) {
+  debugger;
+  try {
+    console.log("InseatReservation",data)
+    const response = await axios.post(`${config.serverUrl}/customers/seatReservation`, data);
+    console.log("Response:"+response)
+    return response;
+  } catch (ex) {
+    console.error('Exception:', ex);
+    return null;
+  }
+}
+
 export async function GetAllBuses() {
   try {
     debugger;
@@ -38,11 +63,12 @@ export async function GetAllBuses() {
   return null
 }
 
-export async function login(email, password) {
-  const body = { email, password }
+export async function login(customerEmail, password) {
+  const body = { customerEmail, password }
   try {
-    const response = await axios.post(`${config.serverUrl}/admin/login`, body)
-    return response.data
+    debugger;
+    const response = await axios.post(`${config.serverUrl}/customers/login`, body)
+    return response
   } catch (ex) {
     console.log(`exception: `, ex)
   }

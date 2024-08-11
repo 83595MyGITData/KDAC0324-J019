@@ -3,20 +3,44 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import bg from "../Images/LoginPage.jpeg";
+import { login } from "../services/customer";
 
 function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const onLogin = () => {
+    const onLogin = async () => {
         if (email.length === 0) {
             toast.error("Enter email");
         } else if (password.length === 0) {
             toast.error("Enter password");
         } else {
-            toast.success("Logged in successfully");
-            navigate('/customer');
+            try{
+            debugger;
+            const result=await login(email, password);
+            console.log(result)
+            //if(result['status']===201){
+
+               // const customerdetails = result.data; 
+                const { jwt, customer } = result.data; // Adjust according to your API response
+                sessionStorage.setItem('token', jwt);
+                sessionStorage.setItem('customer', JSON.stringify(customer));
+               // sessionStorage.setItem('customerdetails', JSON.stringify(customerdetails));
+                
+                toast.success("Logged in successfully");
+                if(customer.role=="ROLE_CUSTOMER"){
+                    navigate('/home');
+                }
+                else{
+                    navigate('/customer');
+                }
+            //}
+        }catch{
+        
+            toast.error("Login failed");
+        }
+            
         }
     };
 
