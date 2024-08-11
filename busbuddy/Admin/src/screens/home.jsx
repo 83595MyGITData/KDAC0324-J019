@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { GetAllBuses } from "../services/customer";
-import Navbar from "../components/navbar";
+import NavbarCustomer from "../components/navbarCustomer";
 
 
 function Home() {
@@ -40,7 +40,7 @@ function Home() {
 
   return (
     <div>
-        <Navbar />
+        <NavbarCustomer />
       <h1 className="page-header">Bus Ticket Booking</h1>
       <div className="row">
         <div className="col"></div>

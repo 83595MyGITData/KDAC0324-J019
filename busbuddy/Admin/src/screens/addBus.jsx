@@ -15,7 +15,7 @@ function AddBus() {
     const [journeyDate, setJourneyDate] = useState('');
     const [departureTime, setDepartureTime] = useState('');
     const [arrivalTime, setArrivalTime] = useState('');
-    const [availableSeats, setAvailableSeats] = useState('');
+    const [availabeSeats, setavailabeSeats] = useState('');
     const [fare, setFare] = useState('');
     const [routeList, setRouteList] = useState([]);
 
@@ -23,7 +23,7 @@ function AddBus() {
         const loadRouteList = async () => {
             try {
                 const result = await getRouteList();
-                if (result['status'] === 200) {
+                if (result['status'] == 200) {
                     setRouteList(result['data']);
                 } else {
                     toast.error("Failed to load route list.");
@@ -55,16 +55,16 @@ function AddBus() {
             toast.error("Enter departure time");
         } else if (!arrivalTime) {
             toast.error("Enter arrival Time");
-        } else if (!availableSeats || isNaN(availableSeats)) {
+        } else if (!availabeSeats || isNaN(availabeSeats)) {
             toast.error("Enter a valid number of Seats");
         } else if (!fare || isNaN(fare)) {
             toast.error("Enter a valid fare");
         } else {
             try {
-                const result = await registerBus(busNumber, busCapacity, busType, source, routeId, destination, driverName, journeyDate, departureTime, arrivalTime, availableSeats, fare);
+                const result = await registerBus(busNumber, busCapacity, busType, source, routeId, destination, driverName, journeyDate, departureTime, arrivalTime, availabeSeats, fare);
                 if (result['status'] === 201) {
                     toast.success('Successfully added new bus');
-                    navigate('/login');
+                    navigate('/buslist');
                 } else {
                     toast.error(result['error'] || "Failed to add new bus.");
                 }
@@ -75,54 +75,53 @@ function AddBus() {
     };
 
     return (
-        <div>
-            <h1 className="page-header">Add New Bus</h1>
-            <div className="row">
-                <div className="col"></div>
+        <div className="container mt-5">
+            <h1 className="page-header text-center">Add New Bus</h1>
+            <div className="row justify-content-center">
                 <div className="col-8">
                     <div className="form row">
                         <div className="col-md-6">
                             <div className="mb-3">
-                                <label htmlFor="busNumber" className="">Bus Number</label>
+                                <label htmlFor="busNumber" className="form-label">Bus Number</label>
                                 <input
                                     id="busNumber"
                                     onChange={(e) => setBusNumber(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="busCapacity" className="">Bus Capacity</label>
+                                <label htmlFor="busCapacity" className="form-label">Bus Capacity</label>
                                 <input
                                     id="busCapacity"
                                     onChange={(e) => setBusCapacity(e.target.value)}
                                     type="number" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="busType" className="">Bus Type</label>
+                                <label htmlFor="busType" className="form-label">Bus Type</label>
                                 <select
                                     id="busType"
                                     onChange={(e) => setBusType(e.target.value)}
-                                    className="form-control">
+                                    className="form-select">
                                     <option value="">Select Bus Type</option>
                                     <option value="AC">AC</option>
                                     <option value="NON_AC">Non-AC</option>
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="source" className="">Source</label>
+                                <label htmlFor="source" className="form-label">Source</label>
                                 <input
                                     id="source"
                                     onChange={(e) => setSource(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="destination" className="">Destination</label>
+                                <label htmlFor="destination" className="form-label">Destination</label>
                                 <input
                                     id="destination"
                                     onChange={(e) => setDestination(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="fare" className="">Fare</label>
+                                <label htmlFor="fare" className="form-label">Fare</label>
                                 <input
                                     id="fare"
                                     onChange={(e) => setFare(e.target.value)}
@@ -131,46 +130,46 @@ function AddBus() {
                         </div>
                         <div className="col-md-6">
                             <div className="mb-3">
-                                <label htmlFor="driverName" className="">Driver Name</label>
+                                <label htmlFor="driverName" className="form-label">Driver Name</label>
                                 <input
                                     id="driverName"
                                     onChange={(e) => setDriverName(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="journeyDate" className="">Journey Date</label>
+                                <label htmlFor="journeyDate" className="form-label">Journey Date</label>
                                 <input
                                     id="journeyDate"
                                     onChange={(e) => setJourneyDate(e.target.value)}
                                     type="date" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="availableSeats" className="">Seats</label>
+                                <label htmlFor="availabeSeats" className="form-label">Available Seats</label>
                                 <input
-                                    id="availableSeats"
-                                    onChange={(e) => setAvailableSeats(e.target.value)}
+                                    id="availabeSeats"
+                                    onChange={(e) => setavailabeSeats(e.target.value)}
                                     type="number" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="departureTime" className="">Departure Time</label>
+                                <label htmlFor="departureTime" className="form-label">Source Departure Time</label>
                                 <input
                                     id="departureTime"
                                     onChange={(e) => setDepartureTime(e.target.value)}
                                     type="time" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="arrivalTime" className="">Arrival Time</label>
+                                <label htmlFor="arrivalTime" className="form-label">Destination Arrival Time</label>
                                 <input
                                     id="arrivalTime"
                                     onChange={(e) => setArrivalTime(e.target.value)}
                                     type="time" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="routeId" className="">Route</label>
+                                <label htmlFor="routeId" className="form-label">Route</label>
                                 <select
                                     id="routeId"
                                     onChange={(e) => setRouteId(e.target.value)}
-                                    className="form-control">
+                                    className="form-select">
                                     <option value="">Select Route</option>
                                     {routeList.map((route) => (
                                         <option key={route.id} value={route.id}>{route.origin} - {route.destination}</option>
@@ -178,14 +177,11 @@ function AddBus() {
                                 </select>
                             </div>
                         </div>
-                        <div className="mb-3">
-                            <div className="col-6">
-                                <button onClick={onRegisterBus} className="btn btn-success mb-3">Add Bus</button>
-                            </div>
+                        <div className="col-12">
+                            <button onClick={onRegisterBus} className="btn btn-success mb-3">Add Bus</button>
                         </div>
                     </div>
                 </div>
-                <div className="col"></div>
             </div>
         </div>
     );
