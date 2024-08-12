@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.CustomerDto;
+import com.sunbeam.dto.FeedbackDto;
 import com.sunbeam.dto.LoginDto;
 import com.sunbeam.dto.ReservationDto;
 import com.sunbeam.exceptions.ResourceNotFoundException;
 import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
+import com.sunbeam.service.FeedBackService;
 import com.sunbeam.service.ReservationService;
 
 @CrossOrigin(origins = "*")
@@ -32,6 +34,9 @@ public class CustomerController {
 	
 	@Autowired
 	private BusService busservice;
+	
+	@Autowired
+	private FeedBackService feedbackService;
 	
 	@PostMapping("/register")
 	//@PreAuthorize("hasAuthority('ROLE_USER')")
@@ -114,5 +119,11 @@ public class CustomerController {
 		
 	}
 	
+//Add feedback
+	@PostMapping("feedback/addFeedBack")
+	public ResponseEntity<?> addFeedback(@RequestBody FeedbackDto dto) {
+	    String newFeedback = feedbackService.addFeedBack(dto);
+	    return new ResponseEntity<>(newFeedback, HttpStatus.CREATED);
+	}
 	
 }

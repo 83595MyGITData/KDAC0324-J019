@@ -1,10 +1,16 @@
 package com.sunbeam.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +57,10 @@ public class Customer extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
+	
+	@JsonIgnore
+    @OneToMany
+	private List<FeedBack> feedback= new ArrayList<>();
 	
 	
 
