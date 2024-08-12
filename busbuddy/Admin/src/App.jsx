@@ -14,6 +14,8 @@ import RouteList from './screens/routeList';
 import AddRoute from './screens/addRoute';
 import Buses from './screens/buses';
 import Reservation from './screens/reservation';
+import Ticket from './screens/ticket';
+import CustomerDetails from './screens/customerDetails';
 
 
 
@@ -29,6 +31,7 @@ function App() {
       <Route path='/customer' element={<Customer/>}></Route>
       <Route path='/home' element={<Home/>}></Route>
       <Route path='/busDetails/:busId' element={<BusDetails/>}></Route>
+      <Route path='/customerDetails/:customerId' element={<CustomerDetails/>}></Route>
       <Route path='/addbus' element={<AddBus/>}></Route>
       <Route path='/buslist' element={<BusList/>}></Route>
       <Route path='/adminDashboard' element={<AdminDashboard/>}></Route>
@@ -38,7 +41,8 @@ function App() {
       <Route path='/buses' element={<Buses/>}></Route>
       <Route path='/reservation/:busId' element={<Reservation/>}></Route>
       
-
+      
+      <Route path="/ticket/:busId&&:seatNumber" element={<Ticket />}></Route>
       
       </Routes>
       <ToastContainer/>

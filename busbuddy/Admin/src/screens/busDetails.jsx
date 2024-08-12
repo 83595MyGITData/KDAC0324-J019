@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBusDetails, getRouteList } from '../services/admin'; // Adjust import paths as needed
-
+import { getBusDetails, getRouteList } from '../services/admin';
 function BusDetails() {
-    const { busId } = useParams(); // Get the bus ID from the URL
+    const { busId } = useParams(); 
     const navigate = useNavigate();
     const [bus, setBus] = useState(null);
     const [routeList, setRouteList] = useState([]);
@@ -132,16 +131,16 @@ function BusDetails() {
                                     className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="availableSeats" className="">Seats</label>
+                                <label htmlFor="availableSeats" className="">Available Seats</label>
                                 <input
                                     id="availableSeats"
-                                    value={bus.availableSeats}
+                                    value={bus.availabeSeats}
                                     readOnly
                                     type="number"
                                     className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="departureTime" className="">Departure Time</label>
+                                <label htmlFor="departureTime" className="">Source Departure Time</label>
                                 <input
                                     id="departureTime"
                                     value={bus.departureTime}
@@ -150,7 +149,7 @@ function BusDetails() {
                                     className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="arrivalTime" className="">Arrival Time</label>
+                                <label htmlFor="arrivalTime" className="">Destination Arrival Time</label>
                                 <input
                                     id="arrivalTime"
                                     value={bus.arrivalTime}

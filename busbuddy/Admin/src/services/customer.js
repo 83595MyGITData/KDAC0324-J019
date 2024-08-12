@@ -25,7 +25,13 @@ export async function register(customerFname, customerLname, customerEmail, pass
 export async function getAvailableSeats(busId) {
   try {
     debugger;
-    const response = await axios.get(`${config.serverUrl}/customers/availabilSet/${busId}`);
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${config.serverUrl}/customers/availabilSet/${busId}`, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
+      
+    })
     console.log("Response Data:"+response.data);
     return response;
   } catch (ex) {
@@ -37,8 +43,14 @@ export async function getAvailableSeats(busId) {
 export async function reserveSeats(data) {
   debugger;
   try {
+    const token = sessionStorage.getItem('token');
     console.log("InseatReservation",data)
-    const response = await axios.post(`${config.serverUrl}/customers/seatReservation`, data);
+    const response = await axios.post(`${config.serverUrl}/customers/seatReservation`, data, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
+      
+    })
     console.log("Response:"+response)
     return response;
   } catch (ex) {
@@ -50,8 +62,12 @@ export async function reserveSeats(data) {
 export async function GetAllBuses() {
   try {
     debugger;
+    const token = sessionStorage.getItem('token');
    // const token = sessionStorage['token']
     const response = await axios.get(`${config.serverUrl}/customers/GetAllBuses`, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
       
     })
     console.log(response)
@@ -68,6 +84,7 @@ export async function login(customerEmail, password) {
   try {
     debugger;
     const response = await axios.post(`${config.serverUrl}/customers/login`, body)
+    console.log('Response',response)
     return response
   } catch (ex) {
     console.log(`exception: `, ex)
@@ -84,3 +101,12 @@ export async function login(customerEmail, password) {
   //       console.log(error)
   //     })
 }
+export const getTicketDetails = async (busId, seatNumber) => {
+  try {
+    const response = await axios.get(`/api/tickets/${busId}/${seatNumber}`);
+    return response;
+  } catch (error) {
+    console.error('Error fetching ticket details:', error);
+    throw error;
+  }
+};
