@@ -10,5 +10,6 @@ public interface RouteService {
 	
 	public ApiResponse addRoute(RouteDto dto);
 	public List<Route> GetAllroute();
+	public Route getRouteById(Long id);
 
 }

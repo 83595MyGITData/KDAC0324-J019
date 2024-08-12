@@ -12,6 +12,7 @@ public interface CustomerService {
 	public String registerCustomer(CustomerDto dto);
 	public ApiResponse login(LoginDto dto);
 	public List<Customer> getAllCustomers();
+	public Customer GetUserByID(Long id);
 
 
 }

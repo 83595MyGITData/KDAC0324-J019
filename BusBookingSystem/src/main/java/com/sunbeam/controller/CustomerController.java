@@ -19,7 +19,7 @@ import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
 import com.sunbeam.service.ReservationService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 //@EnableMethodSecurity(prePostEnabled = true)
 @RequestMapping("/customers")
