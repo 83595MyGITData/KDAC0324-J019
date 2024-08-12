@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { config } from './config'
 
+
 export async function register(customerFname, customerLname, customerEmail, password,address, gender, customerPhone, age) {
   try {
+    const token = sessionStorage.getItem('token');
     debugger;
     // post body
     const body = { customerFname, customerEmail, customerLname, password,address, gender ,customerPhone, age}
@@ -25,9 +27,13 @@ export async function register(customerFname, customerLname, customerEmail, pass
 export async function getCustomers() {
   try {
     debugger;
+    const token = sessionStorage.getItem('token');
    // const token = sessionStorage['token']
     const response = await axios.get(`${config.serverUrl}/Admin/GetAllCustomers`, {
       
+        headers:{
+          Authorization: `Bearer ${token}`,
+         } ,
     })
     console.log(response)
     return response
@@ -41,12 +47,17 @@ export async function getCustomers() {
 //View All Buses Admin side
 export async function getBusList() {
   try {
+    const token = sessionStorage.getItem('token');
     debugger;
    // const token = sessionStorage['token']
-    const response = await axios.get(`${config.serverUrl}/customers/GetAllBuses`, {
+    const response = await axios.get(`${config.serverUrl}/Admin/GetAllBuses`, {
       
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
     })
     console.log(response)
+    
     return response
   } catch (ex) {
     console.log(`exception: `, ex)
@@ -55,23 +66,68 @@ export async function getBusList() {
   return null
 }
 
-export async function getBusById() {
+//getCustomersById
+
+export async function getCustomersById(CustomerId) {
   try {
     debugger;
-   // const token = sessionStorage['token']
-    const response = await axios.get(`${config.serverUrl}/Admin/GetRouteById`, {
+    const token = sessionStorage['token']
+    const response = await axios.get(`${config.serverUrl}/Admin/GetUserByID/${CustomerId}`,  {
       
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
     })
     console.log(response)
     return response
   } catch (ex) {
     console.log(`exception: `, ex)
   }
-
+  
   return null
 }
 
 
+export async function getBusDetails(busId) {
+  try {
+    debugger;
+    const token = sessionStorage['token']
+    const response = await axios.get(`${config.serverUrl}/Admin/GetBusById/${busId}`,  {
+      
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log(response)
+    return response
+  } catch (ex) {
+    console.log(`exception: `, ex)
+  }
+  
+  return null
+}
+
+
+
+// export async function getBusDetails() {
+  //   try {
+    //     debugger;
+    //    // const token = sessionStorage['token']
+    //     const token = sessionStorage.getItem('token');
+//     const response = await axios.get(`${config.serverUrl}/Admin/GetBus`, {
+      
+//         headers:{
+//           Authorization: `Bearer ${token}`,
+//         },
+//     })
+//     console.log(response)
+//     return response.data
+//   } catch (ex) {
+//     console.log(`exception: `, ex)
+//   }
+
+//   return null
+// }
 
 
 
@@ -80,9 +136,13 @@ export async function getBusById() {
 export async function getRouteList() {
   try {
     debugger;
+    const token = sessionStorage.getItem('token');
    // const token = sessionStorage['token']
     const response = await axios.get(`${config.serverUrl}/Admin/GetAllRoutes`, {
       
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
     })
     console.log(response)
     return response
@@ -92,13 +152,18 @@ export async function getRouteList() {
 
   return null
 }
-export async function getBusDetails(busId) {
+
+
+
+export async function deleteCustomer(CustomerId) {
   try {
     debugger;
-   // const token = sessionStorage['token']
-    const response = await axios.get(`${config.serverUrl}/Admin/GetBusById/${busId}`, {
-      
-    })
+    const token = sessionStorage['token']
+    const response = await axios.put(`${config.serverUrl}/Admin/removedStatus/${CustomerId}`,{},{
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
+    } );
     console.log(response)
     return response
   } catch (ex) {
@@ -107,7 +172,6 @@ export async function getBusDetails(busId) {
 
   return null
 }
-
 
 
 //Soft Delete deleteBus
@@ -115,10 +179,13 @@ export async function getBusDetails(busId) {
 export async function deleteBus(busId) {
   try {
     debugger;
-   // const token = sessionStorage['token']
-    const response = await axios.put(`${config.serverUrl}/Admin/deleteBus/${busId}`, {
-      
-    })
+    const token = sessionStorage['token']
+    const response = await axios.put(`${config.serverUrl}/Admin/deleteBus/${busId}`,{},{
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
+    } );
+    
     console.log(response)
     return response
   } catch (ex) {
@@ -131,10 +198,14 @@ export async function deleteBus(busId) {
 //addRoute
 export async function registerRoute(origin, destination, distance) {
   try {
-    
+    const token = sessionStorage.getItem('token');
     const body = { origin, destination, distance };
 
-    const response = await axios.post(`${config.serverUrl}/Admin/AddRoute`, body);
+    const response = await axios.post(`${config.serverUrl}/Admin/AddRoute`, body,{
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     console.log("Response:", response);
     console.log("Response Data:", response.data);
@@ -149,12 +220,22 @@ export async function registerRoute(origin, destination, distance) {
 
 
 //AddBus
+
 export async function registerBus(busNumber,busCapacity,busType,source,routeId,destination,driverName,journeyDate,departureTime,arrivalTime,availabeSeats,fare) {
+  debugger;
+ 
   try {
-   
+  
+    debugger;
+    const token = sessionStorage.getItem('token');
     const body = { busNumber,busCapacity,busType,source,destination,routeId,driverName,journeyDate,departureTime,arrivalTime,availabeSeats,fare}
-    const response = await axios.post(`${config.serverUrl}/Admin/AddBus`, body )
+    const response = await axios.post(`${config.serverUrl}/Admin/AddBus`, body,{
+      headers:{
+        Authorization: `Bearer ${token}`,
+       } ,
+    } );
     return response
+    
   } catch (ex) {
     console.log(`exception: `, ex)
   }

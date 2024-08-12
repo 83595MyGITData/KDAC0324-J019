@@ -6,6 +6,7 @@ import bg from "../Images/LoginPage.jpeg";
 import { login } from "../services/customer";
 
 function Login() {
+    debugger;
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,9 +18,9 @@ function Login() {
             toast.error("Enter password");
         } else {
             try{
-            debugger;
+            
             const result=await login(email, password);
-            console.log(result)
+            console.log('result - ',result)
             //if(result['status']===201){
 
                // const customerdetails = result.data; 
@@ -33,7 +34,7 @@ function Login() {
                     navigate('/home');
                 }
                 else{
-                    navigate('/customer');
+                    navigate('/adminDashboard');
                 }
             //}
         }catch{

@@ -6,7 +6,7 @@ import { getRouteList, registerBus } from '../services/admin';
 function AddBus() {
     const navigate = useNavigate();
     const [busNumber, setBusNumber] = useState('');
-    const [busCapacity, setBusCapacity] = useState('');
+    const busCapacity = 30; // Fixed bus capacity of 30
     const [busType, setBusType] = useState('');
     const [routeId, setRouteId] = useState('');
     const [source, setSource] = useState('');
@@ -15,7 +15,7 @@ function AddBus() {
     const [journeyDate, setJourneyDate] = useState('');
     const [departureTime, setDepartureTime] = useState('');
     const [arrivalTime, setArrivalTime] = useState('');
-    const [availabeSeats, setavailabeSeats] = useState('');
+    const [availabeSeats, setAvailabeSeats] = useState('');
     const [fare, setFare] = useState('');
     const [routeList, setRouteList] = useState([]);
 
@@ -23,7 +23,7 @@ function AddBus() {
         const loadRouteList = async () => {
             try {
                 const result = await getRouteList();
-                if (result['status'] == 200) {
+                if (result['status'] === 200) {
                     setRouteList(result['data']);
                 } else {
                     toast.error("Failed to load route list.");
@@ -39,8 +39,6 @@ function AddBus() {
     const onRegisterBus = async () => {
         if (!busNumber) {
             toast.error("Enter bus Number");
-        } else if (!busCapacity || isNaN(busCapacity)) {
-            toast.error("Enter a valid bus Capacity");
         } else if (!busType) {
             toast.error("Enter Bus Type");
         } else if (!source) {
@@ -55,9 +53,9 @@ function AddBus() {
             toast.error("Enter departure time");
         } else if (!arrivalTime) {
             toast.error("Enter arrival Time");
-        } else if (!availabeSeats || isNaN(availabeSeats)) {
-            toast.error("Enter a valid number of Seats");
-        } else if (!fare || isNaN(fare)) {
+        } else if (!availabeSeats || isNaN(availabeSeats) || availabeSeats <= 0 || availabeSeats > busCapacity) {
+            toast.error(`Enter a valid number of seats (1-${busCapacity})`);
+        } else if (!fare || isNaN(fare) || fare <= 0) {
             toast.error("Enter a valid fare");
         } else {
             try {
@@ -75,28 +73,31 @@ function AddBus() {
     };
 
     return (
-        <div className="container mt-5">
-            <h1 className="page-header text-center">Add New Bus</h1>
-            <div className="row justify-content-center">
+        <div>
+            <h1 className="page-header">Add New Bus</h1>
+            <div className="row">
+                <div className="col"></div>
                 <div className="col-8">
                     <div className="form row">
                         <div className="col-md-6">
                             <div className="mb-3">
-                                <label htmlFor="busNumber" className="form-label">Bus Number</label>
+                                <label htmlFor="busNumber" className="">Bus Number</label>
                                 <input
                                     id="busNumber"
                                     onChange={(e) => setBusNumber(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="busCapacity" className="form-label">Bus Capacity</label>
+                                <label htmlFor="busCapacity" className="">Bus Capacity</label>
                                 <input
                                     id="busCapacity"
-                                    onChange={(e) => setBusCapacity(e.target.value)}
-                                    type="number" className="form-control" />
+                                    value={busCapacity}
+                                    readOnly
+                                    type="number"
+                                    className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="busType" className="form-label">Bus Type</label>
+                                <label htmlFor="busType" className="">Bus Type</label>
                                 <select
                                     id="busType"
                                     onChange={(e) => setBusType(e.target.value)}
@@ -107,21 +108,21 @@ function AddBus() {
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="source" className="form-label">Source</label>
+                                <label htmlFor="source" className="">Source</label>
                                 <input
                                     id="source"
                                     onChange={(e) => setSource(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="destination" className="form-label">Destination</label>
+                                <label htmlFor="destination" className="">Destination</label>
                                 <input
                                     id="destination"
                                     onChange={(e) => setDestination(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="fare" className="form-label">Fare</label>
+                                <label htmlFor="fare" className="">Fare</label>
                                 <input
                                     id="fare"
                                     onChange={(e) => setFare(e.target.value)}
@@ -130,46 +131,49 @@ function AddBus() {
                         </div>
                         <div className="col-md-6">
                             <div className="mb-3">
-                                <label htmlFor="driverName" className="form-label">Driver Name</label>
+                                <label htmlFor="driverName" className="">Driver Name</label>
                                 <input
                                     id="driverName"
                                     onChange={(e) => setDriverName(e.target.value)}
                                     type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="journeyDate" className="form-label">Journey Date</label>
+                                <label htmlFor="journeyDate" className="">Journey Date</label>
                                 <input
                                     id="journeyDate"
                                     onChange={(e) => setJourneyDate(e.target.value)}
                                     type="date" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="availabeSeats" className="form-label">Available Seats</label>
+                                <label htmlFor="availabeSeats" className="">Available Seats</label>
                                 <input
                                     id="availabeSeats"
-                                    onChange={(e) => setavailabeSeats(e.target.value)}
-                                    type="number" className="form-control" />
+                                    onChange={(e) => setAvailabeSeats(e.target.value)}
+                                    type="number"
+                                    className="form-control"
+                                    max={busCapacity} // Ensures the available seats cannot exceed bus capacity
+                                />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="departureTime" className="form-label">Source Departure Time</label>
+                                <label htmlFor="departureTime" className="">Source Departure Time</label>
                                 <input
                                     id="departureTime"
                                     onChange={(e) => setDepartureTime(e.target.value)}
-                                    type="time" className="form-control" />
+                                    type="datetime-local" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="arrivalTime" className="form-label">Destination Arrival Time</label>
+                                <label htmlFor="arrivalTime" className="">Destination Arrival Time</label>
                                 <input
                                     id="arrivalTime"
                                     onChange={(e) => setArrivalTime(e.target.value)}
-                                    type="time" className="form-control" />
+                                    type="datetime-local" className="form-control" />
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="routeId" className="form-label">Route</label>
+                            <div className="mb-3 ">
+                                <label htmlFor="routeId" className="">Route</label>
                                 <select
                                     id="routeId"
                                     onChange={(e) => setRouteId(e.target.value)}
-                                    className="form-select">
+                                    className="form-select ">
                                     <option value="">Select Route</option>
                                     {routeList.map((route) => (
                                         <option key={route.id} value={route.id}>{route.origin} - {route.destination}</option>
@@ -177,11 +181,14 @@ function AddBus() {
                                 </select>
                             </div>
                         </div>
-                        <div className="col-12">
-                            <button onClick={onRegisterBus} className="btn btn-success mb-3">Add Bus</button>
+                        <div className="mb-3">
+                            <div className="col-6">
+                                <button onClick={onRegisterBus} className="btn btn-success mb-3">Add Bus</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div className="col"></div>
             </div>
         </div>
     );

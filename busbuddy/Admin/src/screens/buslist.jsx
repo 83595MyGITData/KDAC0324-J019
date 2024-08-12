@@ -27,6 +27,7 @@ function BusList() {
     }, []);
 
     const onDetails = (busId) => {
+        debugger;
         navigate(`/busdetails/${busId}`);
     };
 
@@ -87,7 +88,7 @@ function BusList() {
                         </thead>
                         <tbody>
                             {buslist
-                                .filter(bus => !bus.deletedStatus)  // Only display buses where deleteStatus is false
+                                .filter(bus => !bus.deletedStatus) 
                                 .map((bus, index) => (
                                     <tr key={bus.id}>
                                         <td>{index + 1}</td>
@@ -100,7 +101,7 @@ function BusList() {
                                         <td>{bus.arrivalTime}</td>
                                         <td>{bus.driverName}</td>
                                         <td>{bus.busCapacity}</td>
-                                        <td>{bus.availabelSeats}</td>
+                                        <td>{bus.availabeSeats}</td>
                                         <td>{bus.fare}</td>
                                         <td>
                                             <div className='d-flex'>

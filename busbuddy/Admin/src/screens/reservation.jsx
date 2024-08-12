@@ -3,13 +3,20 @@ import '../App.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { reserveSeats,getAvailableSeats } from '../services/customer';
 import { toast } from 'react-toastify';
-import Navbar from '../components/navbar';
+import NavbarCustomer from '../components/navbarCustomer';
 import bg from "../Images/BusHome.jpeg";
 
 const Reservation = () => {
-  //const customerId=sessionStorage.getItem(customer.customerId);
+    const customerString = sessionStorage.getItem('customer');
+
+    const customer = JSON.parse(customerString);
+    
+    const userId = customer.id;
+    
+    console.log("Reservation",userId); 
+
   const { busId } = useParams();
-  const [userId, setUserId] = useState(1);
+  //const [userId, setUserId] = useState(customerId.id);
   const [seatNumber, setseatNumber] = useState([]);
 
 
@@ -103,7 +110,7 @@ const Reservation = () => {
             width: "100vw",
             padding: "20px"
         }}>
-      <Navbar />
+      <NavbarCustomer />
 
       <h2 className='page-header' style={{color:"white"}}>Reserve Seat</h2>
 
