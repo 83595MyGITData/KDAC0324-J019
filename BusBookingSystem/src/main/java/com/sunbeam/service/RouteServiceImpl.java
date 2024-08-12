@@ -37,4 +37,11 @@ public class RouteServiceImpl implements RouteService {
 		return routedao.findAll();
 	}
 
+
+	@Override
+	public Route getRouteById(Long id) {
+		Route route=routedao.findById(id).orElseThrow(()-> new RuntimeException( "Invalid route ID"));
+		return route;
+	}
+
 }

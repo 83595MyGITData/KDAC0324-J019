@@ -30,7 +30,7 @@ public class Customer extends BaseEntity {
 	@Column(name = "customer_lname")
 	private String customerLname;
 	
-	@Column(name = "customer_email")
+	@Column(name = "customer_email",unique =true)
 	private String customerEmail;
 	
 	@Column(name = "gender")

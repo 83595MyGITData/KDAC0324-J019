@@ -22,12 +22,15 @@ public class CustomerServiceImpl implements CustomerService {
 	CustomerDao customerdao;
 	@Autowired
 	ModelMapper mapper;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 	
 	public String registerCustomer(CustomerDto dto)
 	{
 		//System.out.println("Service:: "+dto);
 		Customer customer=mapper.map(dto, Customer.class);
-		customer.setRole(Role.CUSTOMER);
+		customer.setRole(Role.ROLE_CUSTOMER);
+		//customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 		customerdao.save(customer);		
 		return "Regisered Successfully";
 	}
@@ -53,6 +56,13 @@ public class CustomerServiceImpl implements CustomerService {
 //		return new ApiResponse("Invalie Password");
 //	}
 		return new ApiResponse("Login Successfully");
+	}
+
+	@Override
+	public Customer GetUserByID(Long id) {
+	
+		Customer customer= customerdao.findById(id).orElseThrow(()-> new RuntimeException( "Invalid user ID"));
+		return customer;
 	}
 	
 	

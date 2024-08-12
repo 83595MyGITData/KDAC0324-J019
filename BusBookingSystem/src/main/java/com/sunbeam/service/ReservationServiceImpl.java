@@ -41,12 +41,12 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		Bus busId= busDao.findById(dto.getBusId())
 				.orElseThrow(()-> new RuntimeException("Invalid Bus Id"));
-		List <BooleanStatus >list=busId.getSetStatus();
+		List <BooleanStatus >list=busId.getSeatStatus();
 		if(list.get(dto.getSeatNumber())==BooleanStatus.FALSE) {
 			return	"Seat Is Already Booked";
 		}
 		list.set(dto.getSeatNumber(), BooleanStatus.FALSE);
-		busId.setSetStatus(list);
+		busId.setSeatStatus(list);
 		Reservation reservation=mapper.map(dto, Reservation.class);
 		reservation.setCustomer(customer);
 		reservation.setSelectedBus(busId);

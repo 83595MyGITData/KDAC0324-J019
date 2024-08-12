@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ import com.sunbeam.service.CustomerService;
 import com.sunbeam.service.RouteService;
 import com.sunbeam.service.ScheduleService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/Admin")
 public class AdminController {
@@ -153,7 +154,7 @@ public class AdminController {
 			}
 		}
 
-@DeleteMapping("/deleteBus/{id}")
+		@PutMapping("/deleteBus/{id}")
 		public ResponseEntity<?> deleteBus(@PathVariable Long id)
 		{
 			try {
@@ -164,7 +165,39 @@ public class AdminController {
 				return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 			}
 		}
-		
+		@GetMapping("/GetUserByID/{id}")
+public ResponseEntity<?> getUserByID(@PathVariable Long id)
+{
+	try {
+		return  ResponseEntity.status(HttpStatus.OK).body(customerservice.GetUserByID(id));
+		}
+	catch(RuntimeException e)
+	{
+		return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
+}
+@GetMapping("/GetBusById/{id}")
+public ResponseEntity<?> GetBusById(@PathVariable Long id)
+{
+	try {
+		return  ResponseEntity.status(HttpStatus.OK).body(busservice.GetBusById(id));
+		}
+	catch(RuntimeException e)
+	{
+		return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
+}
+@GetMapping("/GetRouteById/{id}")
+public ResponseEntity<?> GetRouteById(@PathVariable Long id)
+{
+	try {
+		return  ResponseEntity.status(HttpStatus.OK).body(routeservice.getRouteById(id));
+		}
+	catch(RuntimeException e)
+	{
+		return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
+}
 		
 		
 

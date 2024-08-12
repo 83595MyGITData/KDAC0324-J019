@@ -1,4 +1,4 @@
- package com.sunbeam.service;
+package com.sunbeam.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,7 +60,7 @@ public class BusServiceImpl implements BusService {
 	@Override
 	public String deleteBus(Long id) {
 		 Bus bus = busdao.findById(id).orElseThrow(() -> new RuntimeException("Bus not found"));
-	        bus.setDeletedStatus(BooleanStatus.TRUE);
+	        bus.setDeletedStatus(true);
 	        busdao.save(bus);
 	        return "Bus deleted successfully";
 	}
@@ -72,8 +72,14 @@ public class BusServiceImpl implements BusService {
 //		return list;
 		Bus bus = busdao.findById(busId).orElseThrow(() -> new RuntimeException("Bus not found"));
         // Ensure the collection is properly loaded
-        bus.getSetStatus().size();
-        return bus.getSetStatus();
+        bus.getSeatStatus().size();
+        return bus.getSeatStatus();
+	}
+
+	@Override
+	public Bus GetBusById(Long busId) {
+		Bus bus = busdao.findById(busId).orElseThrow(() -> new RuntimeException("Bus Id is incorrect"));
+		return bus;
 	}
 	
 		
