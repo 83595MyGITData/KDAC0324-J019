@@ -1,9 +1,10 @@
 package com.sunbeam.service;
 
 import com.sunbeam.dto.ReservationDto;
+import com.sunbeam.entity.Reservation;
 
 public interface ReservationService {
 	
-	public String addReservation(ReservationDto dto);
+	public Reservation addReservation(ReservationDto dto);
 
 }

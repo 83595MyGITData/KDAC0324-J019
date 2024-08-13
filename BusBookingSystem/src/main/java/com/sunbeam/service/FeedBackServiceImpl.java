@@ -41,13 +41,14 @@ public class FeedBackServiceImpl implements FeedBackService{
 		Customer customer=customerdao.findById(dto.getCustomerId())
 				.orElseThrow(()-> new RuntimeException("Invalid Customer Id"));
 		
-		Bus bus= busDao.findById(dto.getBusId())
-				.orElseThrow(()-> new RuntimeException("Invalid Bus Id"));
+		Bus bus= busDao.findByBusNumber(dto.getBusNumber());
+				//.orElseThrow(()-> new RuntimeException("Invalid Bus Id"));
+		System.out.println();
 		
 		FeedBack fback=mapper.map(dto, FeedBack.class);
 		
 		fback.setUser(customer);
-		fback.setBus(bus);
+		fback.setBus(bus);	
 	    fback.setCreatedOn(LocalDate.now());
 	    fback.setOverallRatilng((dto.getDriverRating()+dto.getServiceRating())/2);
 		FeedBack persistReservation=fdao.save(fback);
