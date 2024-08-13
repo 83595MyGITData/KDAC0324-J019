@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import bg from "../Images/LoginPage.jpeg";  // Import the background image
 import 'bootstrap/dist/css/bootstrap.min.css';  // Ensure Bootstrap CSS is imported
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';  // Import FontAwesome for icons
-import { faUsers, faRoute, faBus } from '@fortawesome/free-solid-svg-icons';  // Import specific icons
+import { faUsers, faRoute, faBus,  faMessage } from '@fortawesome/free-solid-svg-icons';  // Import specific icons
 
 function AdminDashboard() {
     const navigate = useNavigate();
@@ -71,6 +71,34 @@ function AdminDashboard() {
                             </div>
                         </div>
                     </div>
+
+
+
+
+                    <div className="col-md-3 col-sm-6 mb-3">
+                        <div className="card text-center" style={{ backgroundColor: "rgba(255, 255, 255, 0.8)", borderRadius: "10px" }}>
+                            <div className="card-body">
+                                <FontAwesomeIcon icon={faMessage} size="3x" className="mb-3" style={{ color: "#007bff" }} />
+                                <h5 className="card-title">See FeedBacks</h5>
+                                <button 
+                                    onClick={() => navigate('/feedbackList')} 
+                                    className="btn btn-primary"
+                                    style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+                                >
+                                    Go to Feed-Backs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </div>

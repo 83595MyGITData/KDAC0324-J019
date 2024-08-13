@@ -16,6 +16,8 @@ import Buses from './screens/buses';
 import Reservation from './screens/reservation';
 import Ticket from './screens/ticket';
 import CustomerDetails from './screens/customerDetails';
+import FeedbackForm from './screens/feedBack';
+import FeedbackList from './screens/feedBackList';
 
 
 
@@ -43,6 +45,9 @@ function App() {
       
       
       <Route path="/ticket/:busId&&:seatNumber" element={<Ticket />}></Route>
+      <Route path="/feedback" element={<FeedbackForm />} />
+      <Route path="/feedbackList" element={<FeedbackList />} />
+      
       
       </Routes>
       <ToastContainer/>
