@@ -49,6 +49,17 @@ function Navbar() {
                 Buses
               </Link>
             </li>
+
+            <li className='nav-item'>
+              <Link
+                to='/feedbackList'
+                className='nav-link'
+                aria-current='page'
+                href='#'
+              >
+                Feedback
+              </Link>
+            </li>
             
             <li className='nav-item'>
               <Link onClick={onLogout}

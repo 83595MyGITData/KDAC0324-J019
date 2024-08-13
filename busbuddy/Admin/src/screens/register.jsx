@@ -4,12 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { register } from '../services/admin'
 
 function Register() {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
-    
     const navigate = useNavigate()
-
     const [customerFname, setcustomerFname] = useState('')
     const [customerLname, setcustomerLname] = useState('')
     const [customerEmail, setcustomerEmail] = useState('')
@@ -20,7 +15,9 @@ function Register() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-   
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
 
     const onRegister = async () => {
         if (customerFname.length === 0) {
