@@ -71,7 +71,7 @@ function Login() {
                             <label htmlFor="" className="">Password</label>
                             <input 
                                 onChange={(e) => setPassword(e.target.value)}
-                                type="text" 
+                                type="password" 
                                 className="form-control"
                                 style={styles.input} 
                             />
