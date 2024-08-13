@@ -20,7 +20,7 @@ public interface BusDao extends JpaRepository<Bus, Long> {
 	@Query("Select b from Bus b where b.journeyDate = :Jdate and b.selectedRoute.origin=:org and b.selectedRoute.destination=:des")
 	List<Bus> getAllBusesFromSourceAndDest(@Param("Jdate") LocalDate Jdate, @Param("org") String org, @Param("des") String des);
 	
-
+	 Bus findByBusNumber(String busNumber);
 
 }
 

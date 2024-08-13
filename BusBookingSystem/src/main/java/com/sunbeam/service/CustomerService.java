@@ -13,6 +13,7 @@ public interface CustomerService {
 	public ApiResponse login(LoginDto dto);
 	public List<Customer> getAllCustomers();
 	public Customer GetUserByID(Long id);
+	public String removedStatus(Long id);
 
 
 }

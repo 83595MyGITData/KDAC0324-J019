@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -17,10 +18,10 @@ public class FeedBack extends BaseEntity{
 	private int overallRatilng=(serviceRating+driverRating)/2;
     private String comments;
 	
-    @JsonIgnore
+  //  @JsonIgnore
 	@ManyToOne
 	private Customer user;
-    @JsonIgnore
+  //  @JsonIgnore
 	@ManyToOne
 	private Bus bus;
 	

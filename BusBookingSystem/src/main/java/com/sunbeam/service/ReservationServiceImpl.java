@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
 	private ModelMapper mapper;
 
 	@Override
-	public String addReservation(ReservationDto dto) {
+	public Reservation addReservation(ReservationDto dto) {
 		
 		Customer customer=customerdao.findById(dto.getUserId())
 				.orElseThrow(()-> new RuntimeException("Invalid Customer Id"));
@@ -42,9 +42,9 @@ public class ReservationServiceImpl implements ReservationService {
 		Bus busId= busDao.findById(dto.getBusId())
 				.orElseThrow(()-> new RuntimeException("Invalid Bus Id"));
 		List <BooleanStatus >list=busId.getSeatStatus();
-		if(list.get(dto.getSeatNumber())==BooleanStatus.FALSE) {
-			return	"Seat Is Already Booked";
-		}
+//		if(list.get(dto.getSeatNumber())==BooleanStatus.FALSE) {
+//			return	"Seat Is Already Booked";
+//		}
 		list.set(dto.getSeatNumber(), BooleanStatus.FALSE);
 		busId.setSeatStatus(list);
 		Reservation reservation=mapper.map(dto, Reservation.class);
@@ -52,6 +52,6 @@ public class ReservationServiceImpl implements ReservationService {
 		reservation.setSelectedBus(busId);
 	    reservation.setReservationDate(LocalDate.now());
 		Reservation persistReservation=reservationdao.save(reservation);
-		return "Reservation Confirmed";
+		return persistReservation;
 	}
 }

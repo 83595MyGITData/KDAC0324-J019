@@ -3,6 +3,7 @@ package com.sunbeam.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sunbeam.entity.BusType;
 
 import lombok.AllArgsConstructor;
@@ -35,9 +36,12 @@ public class BusDto{
 	
 	private LocalDate journeyDate; 
 	
-	private LocalTime departureTime; 
+	// @JsonFormat(pattern = "HH:mm:ss")
+	    private LocalTime departureTime;
 
-	private LocalTime arrivalTime;
+	    //@JsonFormat(pattern = "HH:mm:ss")
+	    private LocalTime arrivalTime;
+
 
 	private int availabeSeats;
 	

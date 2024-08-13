@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,14 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.BusDto;
 import com.sunbeam.dto.CustomerDto;
-import com.sunbeam.dto.FeedbackDto;
 import com.sunbeam.dto.RouteDto;
 import com.sunbeam.dto.ScheduleDto;
 import com.sunbeam.entity.FeedBack;
 import com.sunbeam.exceptions.ResourceNotFoundException;
 import com.sunbeam.service.BusService;
 import com.sunbeam.service.CustomerService;
-import com.sunbeam.service.FeedBackService;
+import com.sunbeam.service.FeedBackServiceImpl;
 import com.sunbeam.service.RouteService;
 import com.sunbeam.service.ScheduleService;
 
@@ -51,7 +49,9 @@ public class AdminController {
 	private RouteService routeservice;
 	
 	@Autowired
-	private FeedBackService feedbackService;
+	private FeedBackServiceImpl feedbackService;
+	
+	
 	
 	
 	///Routes
@@ -162,7 +162,7 @@ public class AdminController {
 			}
 		}
 
-		@PutMapping("/deleteBus/{id}")
+@PutMapping("/deleteBus/{id}")
 		public ResponseEntity<?> deleteBus(@PathVariable Long id)
 		{
 			try {
@@ -173,7 +173,7 @@ public class AdminController {
 				return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 			}
 		}
-		@GetMapping("/GetUserByID/{id}")
+@GetMapping("/GetUserByID/{id}")
 public ResponseEntity<?> getUserByID(@PathVariable Long id)
 {
 	try {
@@ -206,16 +206,19 @@ public ResponseEntity<?> GetRouteById(@PathVariable Long id)
 		return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 	}
 }
+@PutMapping("/removedStatus/{id}")
+public ResponseEntity<?> RemovedStatus(@PathVariable Long id)
+{
+	try {
+		return  ResponseEntity.status(HttpStatus.OK).body(customerservice.removedStatus(id));
+		}
+	catch(RuntimeException e)
+	{
+		return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
+}
 
 
-//add feedback
-//@PostMapping("feedback/addFeedBack")
-//public ResponseEntity<?> addFeedback(@RequestBody FeedbackDto dto) {
-//    String newFeedback = feedbackService.addFeedBack(dto);
-//    return new ResponseEntity<>(newFeedback, HttpStatus.CREATED);
-//}
-
-//all feedbacks	    
 @GetMapping("feedback/getAllFeedBack")
 public ResponseEntity<?> getAllFeedbacks(){
 	try {
@@ -234,6 +237,7 @@ public ResponseEntity<List<FeedBack>> getFeedbackForBus(@PathVariable Long busId
     List<FeedBack> feedbackList = feedbackService.getFeedBackOfSpcificBus(busId);
     return new ResponseEntity<>(feedbackList, HttpStatus.OK);
 }
+		
 		
 		
 

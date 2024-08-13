@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +23,15 @@ public class CustomerServiceImpl implements CustomerService {
 	CustomerDao customerdao;
 	@Autowired
 	ModelMapper mapper;
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public String registerCustomer(CustomerDto dto)
 	{
 		//System.out.println("Service:: "+dto);
 		Customer customer=mapper.map(dto, Customer.class);
-		customer.setRole(Role.ROLE_CUSTOMER);
-		//customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+		customer.setRole(Role.ROLE_ADMIN);
+		customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 		customerdao.save(customer);		
 		return "Regisered Successfully";
 	}
@@ -63,6 +64,13 @@ public class CustomerServiceImpl implements CustomerService {
 	
 		Customer customer= customerdao.findById(id).orElseThrow(()-> new RuntimeException( "Invalid user ID"));
 		return customer;
+	}
+
+	@Override
+	public String removedStatus(Long id) {
+		Customer customer= customerdao.findById(id).orElseThrow(()-> new RuntimeException( "Invalid user ID"));
+		customer.setRemovedStatus(true);
+		return "User suspended Successfully";
 	}
 	
 	
