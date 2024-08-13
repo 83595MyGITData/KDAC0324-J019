@@ -74,7 +74,7 @@ function RouteList() {
                                 <th>Origin</th>
                                 <th>Destination</th>
                                 <th>Distance</th>
-                                <th>Actions</th>
+                                {/* <th>Actions</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -93,11 +93,11 @@ function RouteList() {
                                                     className='btn btn-sm btn-danger me-2'>
                                                     Delete
                                                 </button> */}
-                                                <button 
+                                                {/* <button 
                                                     onClick={() => onDetails(route.id)} 
                                                     className='btn btn-sm btn-primary'>
                                                     Details
-                                                </button>
+                                                </button> */}
                                             </div>
                                         </td>
                                     </tr>
