@@ -1,39 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import { reserveSeats,getAvailableSeats } from '../services/customer';
+import { reserveSeats, getAvailableSeats } from '../services/customer';
 import { toast } from 'react-toastify';
 import NavbarCustomer from '../components/navbarCustomer';
 import bg from "../Images/BusHome.jpeg";
 
 const Reservation = () => {
-    const customerString = sessionStorage.getItem('customer');
-
-    const customer = JSON.parse(customerString);
-    
-    const userId = customer.id;
-    
-    console.log("Reservation",userId); 
+  const customerString = sessionStorage.getItem('customer');
+  const customer = JSON.parse(customerString);
+  const userId = customer.id;
 
   const { busId } = useParams();
-  //const [userId, setUserId] = useState(customerId.id);
-  const [seatNumber, setseatNumber] = useState([]);
+ // busId, seatNumber, customerName, source, destination, journeyDate 
+  // const { customerName } = useParams();
+  // const { source } = useParams();
+  // const { destination }= useParams();
+  // const { journeyDate } = useParams();
+  const [seatNumber, setSeatNumber] = useState([]);
+  const [seats, setSeats] = useState(createSeats(30));
+  const navigate = useNavigate();
 
-
-  const createSeats = (num) => {
-    return Array.from({ length: num }, (_, i) => ({
-      id: i+1,
-      reserved: false,
-      selected: false,
-    }));
-  };
-
-  const initialSeats = createSeats(30);
-  // initialSeats[2].reserved = true; // Example reserved seat
-  // initialSeats[6].reserved = true; // Example reserved seat
+  useEffect(() => {
+    loadAvailableBusSeat();
+  }, []);
 
   const loadAvailableBusSeat = async () => {
-    debugger;
     try {
       const result = await getAvailableSeats(busId);
       if (result.status === 200) {
@@ -44,21 +36,9 @@ const Reservation = () => {
         setSeats(updatedSeats);
       }
     } catch (err) {
-      // Optionally log the error
       console.error("Error fetching buses:", err);
     }
   };
-
-  useEffect(() => {
-    loadAvailableBusSeat();
-  }, []);
-
-
-  const [seats, setSeats] = useState(initialSeats);
-  const [name, setName] = useState('');
-  
-
-  const nav = useNavigate();
 
   const toggleSeatSelection = (id) => {
     setSeats(
@@ -68,6 +48,7 @@ const Reservation = () => {
           : seat
       )
     );
+    setSeatNumber(id);
   };
 
   const confirmReservation = async () => {
@@ -76,90 +57,72 @@ const Reservation = () => {
       alert('Please select at least one seat.');
       return;
     }
-    // alert(
-    //   `Reservation confirmed for seats: ${selectedSeats
-    //     .map((seat) => seat.id)
-    //     .join(', ')}`
-    // );
-    
+
     try {
-      const data = await reserveSeats({busId, userId, seatNumber,
-        headers: {
-          'Content-Type': 'application/json'
-        }});
-      console.log(seatNumber);
-      console.log(userId);
-      console.log(busId);
+      const data = await reserveSeats({ busId, userId, seatNumber });
       toast.success('Seat Reservation Successful!!!');
-      nav(`/ticket/${busId}&&${seatNumber}`);
-    }
-    catch(er){
+      navigate('/ticket/:busId&&:seatNumber', {
+        state: {
+          busId,
+          seatNumber,
+          customerName: customer.name,
+          source: data.source,
+          destination: data.destination,
+          journeyDate: data.journeyDate
+        }
+      });
+    } catch (er) {
       console.log(er);
       toast.error('Reservation Failed. Please Try Again');
     }
   };
 
   return (
-    
-
-      <div style={{
-            backgroundImage: `url(${bg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: "100vh",
-            width: "100vw",
-            padding: "20px"
-        }}>
+    <div
+      style={{
+        backgroundImage: `url(${bg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+        width: "100vw",
+        padding: "20px"
+      }}>
       <NavbarCustomer />
-
-      <h2 className='page-header' style={{color:"white"}}>Reserve Seat</h2>
+      <h2 className='page-header' style={{ color: "white" }}>Reserve Seat</h2>
 
       <div className="bus-layout">
         {seats.map((seat) => (
           <div
             key={seat.id}
-
-            
-
-            className={`seat ${seat.reserved ? 'reserved' : ''} ${seat.selected ? 'selected' : ''
-              }`}
-            // onClick={() => !seat.reserved && toggleSeatSelection(seat.id) &&  setseatNumber(seat.id)}
-            onClick={() => {
-              if (!seat.reserved) {
-                toggleSeatSelection(seat.id);
-                setseatNumber(seat.id-1);
-              }
-            }}
-            
-
-            
-            
+            className={`seat ${seat.reserved ? 'reserved' : ''} ${seat.selected ? 'selected' : ''}`}
+            onClick={() => !seat.reserved && toggleSeatSelection(seat.id)}
           >
             {seat.id}
           </div>
         ))}
       </div>
       <div className='' style={{ display: 'grid', gridTemplateRows: 'repeat(3, auto)', gap: '10px' }}>
-        <div className='seatD'>Available</div>
-        <div className='seatD' style={{ backgroundColor: 'greenyellow' }}>Booking in progress</div>
-        <div className='seatD' style={{ backgroundColor: '#faa0a0' }}><p>Booked</p></div>
-    </div>
-
+       <div className='seatD'>Available</div>
+      <div className='seatD' style={{ backgroundColor: 'greenyellow' }}>Booking in progress</div>
+       <div className='seatD' style={{ backgroundColor: '#faa0a0' }}><p>Booked</p></div>    </div>
       <div className="details-form mt-3">
-        
-        <form>
-                   <button type="button" className='btn btn-success mt-3 shadow p-3 mb-5 rounded' onClick={confirmReservation}
-                   style={{margin:'56px'}}>
-            Confirm Reservation
-          </button>
-        </form>
+        <button type="button" className='btn btn-success mt-3 shadow p-3 mb-5 rounded' onClick={confirmReservation} style={{ margin: '56px' }}>
+          Confirm Reservation
+        </button>
       </div>
-
-      
     </div>
   );
 };
 
+const createSeats = (num) => {
+  return Array.from({ length: num }, (_, i) => ({
+    id: i + 1,
+    reserved: false,
+    selected: false,
+  }));
+};
+
 export default Reservation;
+
 
 
