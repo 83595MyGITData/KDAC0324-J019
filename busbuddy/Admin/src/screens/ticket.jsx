@@ -1,158 +1,55 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-//import { getticket } from '../services/ticket';
-import bg from "../Images/BusHome.jpeg";
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from '../components/navbar';
 
-function Ticket() {
-    const { ticketId } = useParams(); 
-    const navigate = useNavigate();
-    const [ticket, setTicket] = useState(null);
+const Ticket = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const loadticket = async () => {
-            try {
-               // const result = await getticket(ticketId);
-                // if (result['status'] === 200) {
-                //     setTicket(result['data']);
-                // } else {
-                //     toast.error("Failed to load ticket details.");
-                // }
-            } catch (error) {
-                toast.error("An error occurred while fetching ticket details.");
-            }
-        };
+  useEffect(() => {
+    console.log("Received state in Ticket component:", location.state);
+  }, [location.state]);
 
-        loadticket();
-    }, [ticketId]);
+  const { busId, seatNumber, customerName, source, destination, journeyDate } = location.state || {};
 
-    const handleBack = () => {
-        navigate('/tickets');
-    };
+  if (!busId || !seatNumber) {
+    navigate('/error');
+    return null;
+  }
 
-    if (!ticket) {
-        return <div>Loading...</div>;
-    }
+  const customerString = sessionStorage.getItem('customer');
+  const customer = JSON.parse(customerString);
+  const customerNname = customer.customerFname;
 
-    return (
-        <div style={{
-            backgroundImage: `url(${bg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: "100vh",
-            width: "100vw",
-        }}>
-            <h1 className="page-header" style={{ color: "white" }}>Ticket Details</h1>
-            <div className="row">
-                <div className="col"></div>
-                <div className="col-8">
-                    <div className="form row" style={styles.form}>
-                        <div className="col-md-6">
-                            <div className="mb-3">
-                                <label htmlFor="customerName" className="">Customer Name</label>
-                                <input
-                                    id="customerName"
-                                    value={ticket.customerName}
-                                    readOnly
-                                    type="text"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="seatNumber" className="">Seat Number</label>
-                                <input
-                                    id="seatNumber"
-                                    value={ticket.seatNumber}
-                                    readOnly
-                                    type="text"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="reservationDate" className="">Reservation Date</label>
-                                <input
-                                    id="reservationDate"
-                                    value={ticket.reservationDate}
-                                    readOnly
-                                    type="date"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="departureTime" className="">Departure Time</label>
-                                <input
-                                    id="departureTime"
-                                    value={ticket.departureTime}
-                                    readOnly
-                                    type="time"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="arrivalTime" className="">Arrival Time</label>
-                                <input
-                                    id="arrivalTime"
-                                    value={ticket.arrivalTime}
-                                    readOnly
-                                    type="time"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="source" className="">Source</label>
-                                <input
-                                    id="source"
-                                    value={ticket.source}
-                                    readOnly
-                                    type="text"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="destination" className="">Destination</label>
-                                <input
-                                    id="destination"
-                                    value={ticket.destination}
-                                    readOnly
-                                    type="text"
-                                    className="form-control"
-                                    style={styles.input}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <button onClick={handleBack} className="btn btn-primary mb-3" style={styles.button}>Back</button>
-                    </div>
-                </div>
-                <div className="col"></div>
+
+  return (
+    <div>
+      <Navbar />
+
+      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+        <div className="card shadow-sm" style={{ width: '350px' }}>
+          <div className="card-header text-center">
+            <h2 className="card-title mb-0">Ticket</h2>
+            <p className="text-muted">Bus ID: {busId}</p>
+          </div>
+          <div className="card-body text-center">
+            <div className="mb-3">
+              <p className="mb-2">Seat Number: <span className="fw-bold">{seatNumber}</span></p>
+              <p className="mb-2">Customer Name: <span className="fw-bold">{customerNname}</span></p>
+              {/* <p className="mb-2">Source: <span className="fw-bold">{source}</span></p>
+              <p className="mb-2">Destination: <span className="fw-bold">{destination}</span></p>
+              <p className="mb-2">Journey Date: <span className="fw-bold">{journeyDate}</span></p> */}
+              <p className="mb-2">Date: <span className="fw-bold">{new Date().toLocaleDateString()}</span></p>
+              <p className="mb-0">Time: <span className="fw-bold">{new Date().toLocaleTimeString()}</span></p>
             </div>
+          </div>
+          <div className="card-footer text-center">
+            <p className="text-muted mb-0">Thank you for choosing our service!</p>
+          </div>
         </div>
-    );
-}
-
-const styles = {
-    form: {
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        backgroundColor: 'rgba(245, 245, 200, 0.8)',
-        border: '1px solid #ddd'
-    },
-    input: {
-        borderRadius: '5px',
-        border: '1px solid #ccc',
-        boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.1)'
-    },
-    button: {
-        width: '100%'
-    }
+      </div>
+    </div>
+  );
 };
 
 export default Ticket;
